@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tes Komprehensif Penjurusan KSN (Calon Siswa SMA)</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#181c2e; --ink:#e8eaf2; --muted:#9aa3c0;
+    --accent:#6c8cff; --accent2:#33d6a6; --line:#2a3050; --warn:#ffb454;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0f1220,#141831);color:var(--ink);
+    font-family:"Segoe UI",system-ui,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 18px 80px}
+  h1{font-size:26px;margin:0 0 6px}
+  h2{font-size:19px;margin:34px 0 6px;color:var(--accent)}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+  .q{padding:14px 0;border-bottom:1px dashed var(--line)}
+  .q:last-child{border-bottom:none}
+  .qtext{font-weight:600;margin-bottom:10px}
+  .qtext .tag{font-size:11px;color:var(--muted);font-weight:400}
+  .hint{font-size:12px;color:var(--muted);font-style:italic;margin:4px 0 8px}
+  .likert{display:flex;gap:6px;flex-wrap:wrap}
+  .likert label{flex:1;min-width:80px;text-align:center;border:1px solid var(--line);
+    border-radius:10px;padding:8px 4px;cursor:pointer;font-size:13px;transition:.15s;background:#11152480}
+  .likert input{display:none}
+  .likert label:has(input:checked){background:var(--accent);border-color:var(--accent);color:#fff}
+  .opts label{display:block;border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;margin:6px 0;cursor:pointer;font-size:14px;background:#11152480;transition:.15s}
+  .opts label:has(input:checked){background:#27407a;border-color:var(--accent)}
+  .opts input{margin-right:10px}
+  .scale-help{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .progress{position:sticky;top:0;background:#0f1220ee;backdrop-filter:blur(6px);
+    padding:10px 0;z-index:5;border-bottom:1px solid var(--line);margin-bottom:6px}
+  .ptrack{height:8px;background:#11152480;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .3s}
+  .pnum{font-size:12px;color:var(--muted);margin-top:4px}
+  button{background:var(--accent);color:#fff;border:none;border-radius:12px;
+    padding:14px 26px;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px}
+  button:hover{filter:brightness(1.08)}
+  .result{display:none}
+  .bar{margin:10px 0}
+  .bar .lab{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+  .track{height:16px;background:#11152480;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .9s ease}
+  .fill.apt{background:linear-gradient(90deg,#ffb454,#ff7a7a)}
+  .pill{display:inline-block;background:#27407a;border:1px solid var(--accent);
+    border-radius:20px;padding:3px 12px;font-size:13px;margin:3px 4px 0 0}
+  .interp{background:#11152480;border-left:3px solid var(--accent2);padding:14px 16px;border-radius:8px;margin-top:14px}
+  .warn{color:var(--warn)}
+  .muted{color:var(--muted)}
+  .err{color:#ff7a7a;font-size:14px;margin-top:8px;display:none}
+  ol,ul{margin:8px 0 8px 20px}
+  .note{font-size:12px;color:var(--muted);background:#11152480;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+  .foot{font-size:12px;color:var(--muted);margin-top:30px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="progress">
+    <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+    <div class="pnum" id="pnum">Terisi 0 dari 0</div>
+  </div>
+
+  <h1>🧭 Tes Komprehensif Penjurusan KSN</h1>
+  <p class="sub">Untuk <b>calon siswa SMA</b>. Versi ini dirancang ulang berdasarkan riset: prediktor bakat terkuat bukan hafalan, melainkan <b>kemampuan bernalar dalam "cara berpikir" tiap bidang</b> + minat + ketekunan. Soal bakat di sini bergaya olimpiade/Bebras — <b>menantang tapi tidak butuh materi SMA</b>. Tidak apa kalau sulit; kerjakan sebisamu dan jujur menilai apakah kamu menikmati prosesnya.</p>
+
+  <div class="note">⚠️ Bagian bakat memang dibuat sulit dan multi-langkah. Tujuannya membedakan, bukan menjebak. Jangan pakai kalkulator — pakai logika &amp; coret-coretan.</div>
+
+  <h2>Bagian 1 — Minat &amp; Kecenderungan Pikiran</h2>
+  <p class="scale-help">Skala: 1 = Sangat tidak setuju &nbsp;·&nbsp; 3 = Netral &nbsp;·&nbsp; 5 = Sangat setuju</p>
+  <div class="card" id="sec-interest"></div>
+
+  <h2>Bagian 2 — Tes Bakat (Penalaran Gaya Olimpiade)</h2>
+  <p class="scale-help">Pilih jawaban terbaik. Setelah tiap bidang, nilai seberapa kamu <b>menikmati</b> berpikir keras di soal itu — ini sama pentingnya dengan benar/salah.</p>
+  <div class="card" id="sec-aptitude"></div>
+
+  <h2>Bagian 3 — Gaya Belajar, Kerja &amp; Gaya Hidup</h2>
+  <p class="scale-help">Skala: 1 = Sangat tidak sesuai diriku &nbsp;·&nbsp; 5 = Sangat sesuai diriku</p>
+  <div class="card" id="sec-life"></div>
+
+  <h2>Bagian 4 — Ketekunan &amp; Mental Bertanding (Grit)</h2>
+  <p class="scale-help">Olimpiade butuh ribuan jam latihan. Bagian ini mengukur kesiapan mentalmu, terpisah dari bidang.</p>
+  <div class="card" id="sec-grit"></div>
+
+  <button id="submit">🔍 Hitung Hasil Saya</button>
+  <p class="err" id="err">Masih ada pertanyaan yang belum dijawab. Mohon lengkapi semua agar hasil akurat.</p>
+
+  <div class="result card" id="result">
+    <h2 style="margin-top:0">📊 Hasil Kamu</h2>
+    <p class="muted">Kecocokan total per bidang = gabungan minat + bakat + kenikmatan + gaya hidup.</p>
+    <div id="bars"></div>
+    <h2>🎯 Profil Bakat Murni (jawaban benar saja)</h2>
+    <p class="muted">Ini sinyal kemampuan bernalar mentahmu per bidang, tanpa pengaruh minat.</p>
+    <div id="aptbars"></div>
+    <div class="interp" id="interp"></div>
+  </div>
+
+  <p class="foot">Alat bantu refleksi, bukan vonis. Paling valid bila dipadukan uji-coba nyata 2–4 minggu di bidang teratasmu.</p>
+</div>
+
+<script>
+const FIELDS = { MAT:"Matematika", INF:"Informatika", FIS:"Fisika", KIM:"Kimia", BIO:"Biologi", EKO:"Ekonomi" };
+
+/* ====== BAGIAN 1: MINAT ====== */
+const INTEREST = [
+  {t:"Saat ketemu teka-teki sulit, saya justru makin penasaran sampai terpecahkan, bukan ingin menyerah.", f:{MAT:0.9, INF:0.9}},
+  {t:"Saya lebih puas membuktikan 'kenapa sesuatu pasti benar' daripada sekadar tahu jawabannya.", f:{MAT:1.3}},
+  {t:"Saya suka membayangkan langkah-langkah/aturan tersembunyi di balik cara kerja sebuah sistem.", f:{INF:1.2, MAT:0.4}},
+  {t:"Saya sering ingin tahu 'bagaimana aplikasi/game ini dibuat' sampai mencari tahu sendiri.", f:{INF:1.3}},
+  {t:"Saya menikmati menyusun strategi paling efisien untuk menyelesaikan sesuatu (rute tercepat, cara paling hemat).", f:{INF:1.0, EKO:0.5}},
+  {t:"Saya penasaran pada 'mengapa' fenomena fisik terjadi (kenapa langit biru, kenapa benda jatuh begitu).", f:{FIS:1.4}},
+  {t:"Saya suka memperkirakan apa yang akan terjadi pada sebuah percobaan sebelum mencobanya.", f:{FIS:0.9, KIM:0.7}},
+  {t:"Saya tertarik pada apa yang terjadi di tingkat atom/molekul saat zat berubah.", f:{KIM:1.4}},
+  {t:"Saya suka mengklasifikasikan & menemukan pola di antara banyak hal (zat, spesies, data).", f:{KIM:0.8, BIO:0.8}},
+  {t:"Saya penasaran bagaimana tubuh makhluk hidup bekerja sebagai satu sistem yang saling terhubung.", f:{BIO:1.4}},
+  {t:"Saya tertarik pada mekanisme penyakit, obat, dan cara tubuh memperbaiki diri.", f:{BIO:1.1}},
+  {t:"Saya ingin pekerjaan yang dampaknya langsung terasa pada orang lain.", f:{BIO:0.7, EKO:0.3}},
+  {t:"Saya suka menganalisis kenapa orang/pasar mengambil keputusan tertentu soal uang.", f:{EKO:1.4}},
+  {t:"Saya tertarik membandingkan untung-rugi & risiko sebelum memutuskan sesuatu.", f:{EKO:1.1, MAT:0.3}},
+  {t:"Saya lebih tertarik pada masalah yang jawabannya bisa dibuktikan pasti, bukan opini.", f:{MAT:0.8, FIS:0.6}},
+];
+
+/* ====== BAGIAN 2: BAKAT (penalaran multi-langkah, tanpa materi SMA) ====== */
+const APT = [
+  // MATEMATIKA — teori bilangan, kombinatorik, invarian
+  {field:"MAT", t:"Berapa DUA angka terakhir dari 7 dipangkatkan 2025? (petunjuk: cari pola angka satuan-puluhan dari 7¹, 7², 7³, 7⁴ …)",
+   hint:"7,49,(3)43,(4)01, lalu berulang setiap 4 pangkat.",
+   opts:["01","07","43","49"], correct:1, w:5},
+  {field:"MAT", t:"Di sebuah pesta ada 20 orang, dan setiap dua orang berjabat tangan tepat satu kali. Berapa total jabat tangan?",
+   opts:["190","200","380","400"], correct:0, w:5},
+  {field:"MAT", t:"Angka 1 sampai 10 ditulis di papan. Tiap langkah: hapus dua angka a dan b, ganti dengan (a+b−1). Setelah 9 langkah tersisa satu angka. Berapa nilainya?",
+   hint:"Perhatikan: apa yang terjadi pada TOTAL semua angka setiap langkah?",
+   opts:["1","45","46","55"], correct:2, w:5},
+  // INFORMATIKA — computational thinking / Bebras
+  {field:"INF", t:"Robot mulai di titik (0,0) menghadap UTARA. M = maju 1 langkah; R = putar kanan 90°. Jalankan urutan: M R M R M. Di titik mana robot berakhir?",
+   hint:"Lacak posisi & arah langkah demi langkah.",
+   opts:["(0,1)","(1,0)","(1,1)","(2,1)"], correct:1, w:5},
+  {field:"INF", t:"Ada 9 koin identik; satu di antaranya palsu dan lebih ringan. Pakai timbangan dua lengan. Berapa kali penimbangan MINIMUM yang DIJAMIN menemukan koin palsu?",
+   hint:"Bagi koin jadi tiga kelompok tiap penimbangan.",
+   opts:["2","3","4","8"], correct:0, w:5},
+  {field:"INF", t:"Aturan kompresi: huruf diikuti jumlah pengulangannya (AAAB → A3B1). Maka string 'W4X1Y3' adalah hasil kompresi dari…",
+   opts:["WXYWXYWXY","WWWWXYYY","W4X1Y3","WXY431"], correct:1, w:5},
+  // FISIKA — penalaran fisik, miskonsepsi, spasial
+  {field:"FIS", t:"Dari atap gedung, bola A dilempar lurus ke ATAS dan bola B dilempar lurus ke BAWAH dengan laju awal SAMA. Saat menyentuh tanah, laju keduanya…",
+   hint:"Pikirkan energi: keduanya mulai dari tinggi & laju yang sama.",
+   opts:["Bola A lebih besar","Bola B lebih besar","Sama besar","Tergantung berat bola"], correct:2, w:5},
+  {field:"FIS", t:"Sebuah perahu mengapung di kolam sambil membawa batu besar. Batu dilempar ke kolam dan tenggelam ke dasar. Permukaan air kolam akan…",
+   hint:"Bandingkan air yang dipindahkan batu saat di perahu vs saat tenggelam.",
+   opts:["Naik","Turun","Tetap","Tidak bisa ditentukan"], correct:1, w:5},
+  {field:"FIS", t:"Satu keran mengisi penuh sebuah bak dalam 6 menit. Jika DUA keran identik dibuka bersamaan untuk mengisi bak yang sama, waktunya menjadi…",
+   opts:["2 menit","3 menit","6 menit","12 menit"], correct:1, w:5},
+  // KIMIA — kekekalan, pereaksi pembatas, klasifikasi
+  {field:"KIM", t:"Sebatang lilin dibakar habis di dalam stoples KEDAP udara berisi udara. Dibanding sebelum dibakar, massa total isi stoples (lilin + udara + sisa) menjadi…",
+   hint:"Tidak ada zat yang keluar/masuk stoples.",
+   opts:["Bertambah","Berkurang","Tetap","Tergantung ukuran lilin"], correct:2, w:5},
+  {field:"KIM", t:"Untuk merakit 1 'molekul' mainan butuh 2 baut + 3 mur. Kamu punya 10 baut dan 12 mur. Berapa molekul terbanyak yang bisa dirakit?",
+   hint:"Hitung batas dari baut dan dari mur, ambil yang lebih kecil.",
+   opts:["4","5","6","10"], correct:0, w:5},
+  {field:"KIM", t:"Zat X tidak dapat diuraikan lagi menjadi zat yang lebih sederhana melalui reaksi kimia biasa. X paling tepat digolongkan sebagai…",
+   opts:["Unsur","Senyawa","Campuran","Larutan"], correct:0, w:5},
+  // BIOLOGI — kontrol eksperimen, sistem, logika pewarisan
+  {field:"BIO", t:"Kamu menguji apakah pupuk membuat tanaman lebih tinggi, dengan 2 kelompok tanaman. Agar kesimpulan sahih, kedua kelompok harus…",
+   hint:"Hanya SATU faktor yang boleh berbeda.",
+   opts:["Diberi jenis pupuk berbeda","Sama dalam segala hal kecuali pemberian pupuk","Ditanam di musim berbeda","Tidak perlu disamakan"], correct:1, w:5},
+  {field:"BIO", t:"Rantai makanan: rumput → belalang → katak → ular. Jika SELURUH katak punah, dalam jangka pendek paling mungkin terjadi…",
+   hint:"Siapa pemangsa & mangsa langsung dari katak?",
+   opts:["Belalang bertambah, ular berkurang","Belalang berkurang, ular bertambah","Rumput punah","Tidak ada yang berubah"], correct:0, w:5},
+  {field:"BIO", t:"Kedua orang tua BISA menggulung lidah, tetapi salah satu anak mereka TIDAK bisa. Sifat 'tidak bisa menggulung lidah' kemungkinan besar bersifat…",
+   hint:"Sifat yang 'tersembunyi' pada orang tua tapi muncul pada anak.",
+   opts:["Dominan","Resesif","Hanya diwariskan ayah","Tidak diwariskan"], correct:1, w:5},
+  // EKONOMI — biaya peluang, insentif, elastisitas
+  {field:"EKO", t:"Dengan sumber daya yang sama, sebuah negara bisa memproduksi 100 ton beras ATAU 50 mobil. Biaya peluang memproduksi 1 mobil adalah…",
+   hint:"Berapa beras yang dikorbankan per 1 mobil?",
+   opts:["0,5 ton beras","2 ton beras","50 ton beras","100 ton beras"], correct:1, w:5},
+  {field:"EKO", t:"Pemerintah ingin menurunkan jumlah perokok. Kebijakan EKONOMI yang paling langsung menekan jumlah pembeli rokok adalah…",
+   opts:["Menaikkan pajak sehingga harga rokok naik","Menurunkan harga rokok","Menaikkan gaji pegawai","Melarang iklan minuman ringan"], correct:0, w:5},
+  {field:"EKO", t:"Sebuah kedai MENAIKKAN harga es teh, tetapi total pendapatannya justru TURUN. Ini berarti jumlah gelas yang terjual…",
+   hint:"Pendapatan = harga × jumlah terjual.",
+   opts:["Turun cukup banyak (pembeli sangat peka harga)","Naik","Tetap sama persis","Tidak berhubungan dengan harga"], correct:0, w:5},
+];
+
+const ENJOY = [
+  {field:"MAT", t:"Seberapa kamu MENIKMATI berpikir keras di soal MATEMATIKA tadi (terlepas dari benar/salah)?"},
+  {field:"INF", t:"Seberapa kamu MENIKMATI soal INFORMATIKA / logika langkah tadi?"},
+  {field:"FIS", t:"Seberapa kamu MENIKMATI soal FISIKA / penalaran fenomena tadi?"},
+  {field:"KIM", t:"Seberapa kamu MENIKMATI soal KIMIA tadi?"},
+  {field:"BIO", t:"Seberapa kamu MENIKMATI soal BIOLOGI tadi?"},
+  {field:"EKO", t:"Seberapa kamu MENIKMATI soal EKONOMI tadi?"},
+];
+
+/* ====== BAGIAN 3: GAYA HIDUP ====== */
+const LIFE = [
+  {t:"Saya tahan belajar & menghafal materi dalam jumlah besar berjam-jam.", f:{BIO:1.0, KIM:0.7}},
+  {t:"Saya betah berjam-jam mengutak-atik satu masalah sampai akhirnya 'klik'.", f:{INF:1.0, MAT:0.8}},
+  {t:"Saya nyaman bertemu & membantu banyak orang baru setiap hari.", f:{BIO:1.0}},
+  {t:"Saya menikmati abstraksi murni — bermain dengan ide/angka tanpa wujud fisik.", f:{MAT:1.1}},
+  {t:"Saya rela menempuh pendidikan sangat lama (10+ tahun) demi karier impian.", f:{BIO:1.0}},
+  {t:"Saya ingin keterampilan yang bisa dipakai kerja jarak jauh / ke luar negeri.", f:{INF:1.1}},
+  {t:"Saya menikmati percobaan langsung dengan alat / di laboratorium.", f:{KIM:1.0, FIS:0.6, BIO:0.4}},
+  {t:"Saya suka mengubah ide menjadi sesuatu yang nyata & bisa dijalankan/dipakai.", f:{INF:1.0}},
+  {t:"Saya tertarik mengelola uang/strategi berdasarkan data & angka.", f:{EKO:1.1, INF:0.3}},
+  {t:"Saya lebih suka hasil kerja yang cepat terlihat daripada proses bertahun-tahun.", f:{INF:0.7, EKO:0.5}},
+  {t:"Saya sabar pada riset/percobaan panjang demi menemukan sesuatu yang baru.", f:{FIS:0.8, BIO:0.5, KIM:0.5}},
+  {t:"Saya lebih suka kerja fokus & mendalam sendirian daripada banyak interaksi.", f:{MAT:0.8, INF:0.6}},
+  {t:"Saya tertarik pada teknologi mutakhir (AI, robotika, perangkat lunak).", f:{INF:1.0}},
+  {t:"Saya peduli pada kesehatan & kesejahteraan fisik orang lain.", f:{BIO:1.0}},
+];
+
+/* ====== BAGIAN 4: GRIT (skor terpisah) ====== */
+const GRIT = [
+  "Kalau gagal/buntu di sebuah soal, saya cenderung mencobanya lagi dengan cara berbeda, bukan menyerah.",
+  "Saya bisa berlatih hal yang sama berulang-ulang walau membosankan, demi menguasainya.",
+  "Saya tetap konsisten mengejar target jangka panjang meski hasilnya belum kelihatan berbulan-bulan.",
+  "Saya tidak terlalu terganggu saat kalah/keliru; saya jadikan bahan belajar.",
+  "Saya bisa mengatur waktu sendiri untuk belajar tanpa harus selalu disuruh.",
+  "Saya nyaman berada di lingkungan kompetitif yang menantang.",
+];
+
+/* ====== RENDER ====== */
+const likert = (name) => {
+  let h = '<div class="likert">';
+  ["1","2","3","4","5"].forEach(v=>{ h += `<label><input type="radio" name="${name}" value="${v}"><span>${v}</span></label>`; });
+  return h + '</div>';
+};
+function renderInterest(){
+  let h=""; INTEREST.forEach((q,i)=>{ h+=`<div class="q"><div class="qtext">${i+1}. ${q.t}</div>${likert("int_"+i)}</div>`; });
+  document.getElementById("sec-interest").innerHTML=h;
+}
+function renderAptitude(){
+  let h="";
+  APT.forEach((q,i)=>{
+    h+=`<div class="q"><div class="qtext">${i+1}. ${q.t} <span class="tag">[${FIELDS[q.field]}]</span></div>`;
+    if(q.hint) h+=`<div class="hint">💡 ${q.hint}</div>`;
+    h+=`<div class="opts">`;
+    q.opts.forEach((o,j)=>{ h+=`<label><input type="radio" name="apt_${i}" value="${j}">${o}</label>`; });
+    h+=`</div></div>`;
+  });
+  h+=`<div class="q"><div class="qtext muted">— Penilaian Kenikmatan (sama pentingnya dengan benar/salah) —</div></div>`;
+  ENJOY.forEach((q,i)=>{ h+=`<div class="q"><div class="qtext">${q.t}</div>${likert("enj_"+i)}</div>`; });
+  document.getElementById("sec-aptitude").innerHTML=h;
+}
+function renderLife(){
+  let h=""; LIFE.forEach((q,i)=>{ h+=`<div class="q"><div class="qtext">${i+1}. ${q.t}</div>${likert("life_"+i)}</div>`; });
+  document.getElementById("sec-life").innerHTML=h;
+}
+function renderGrit(){
+  let h=""; GRIT.forEach((t,i)=>{ h+=`<div class="q"><div class="qtext">${i+1}. ${t}</div>${likert("grit_"+i)}</div>`; });
+  document.getElementById("sec-grit").innerHTML=h;
+}
+renderInterest(); renderAptitude(); renderLife(); renderGrit();
+
+/* ====== PROGRESS ====== */
+const TOTAL = INTEREST.length + APT.length + ENJOY.length + LIFE.length + GRIT.length;
+function val(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el?Number(el.value):null; }
+function countAnswered(){
+  let g=0;
+  INTEREST.forEach((q,i)=>{ if(val("int_"+i)!==null)g++; });
+  APT.forEach((q,i)=>{ if(val("apt_"+i)!==null)g++; });
+  ENJOY.forEach((q,i)=>{ if(val("enj_"+i)!==null)g++; });
+  LIFE.forEach((q,i)=>{ if(val("life_"+i)!==null)g++; });
+  GRIT.forEach((q,i)=>{ if(val("grit_"+i)!==null)g++; });
+  return g;
+}
+function updateProgress(){
+  const g=countAnswered();
+  document.getElementById("pfill").style.width=Math.round(100*g/TOTAL)+"%";
+  document.getElementById("pnum").textContent=`Terisi ${g} dari ${TOTAL}`;
+}
+document.addEventListener("change",e=>{ if(e.target.matches('input[type=radio]')) updateProgress(); });
+
+/* ====== SCORING ====== */
+function compute(){
+  const score={},max={},apt={},aptMax={};
+  for(const k in FIELDS){ score[k]=0;max[k]=0;apt[k]=0;aptMax[k]=0; }
+  INTEREST.forEach((q,i)=>{ const v=val("int_"+i); for(const f in q.f){ if(v!==null)score[f]+=v*q.f[f]; max[f]+=5*q.f[f]; } });
+  APT.forEach((q,i)=>{ const v=val("apt_"+i); max[q.field]+=q.w; aptMax[q.field]+=q.w;
+    if(v!==null&&v===q.correct){ score[q.field]+=q.w; apt[q.field]+=q.w; } });
+  ENJOY.forEach((q,i)=>{ const v=val("enj_"+i); const w=1.6; max[q.field]+=5*w; if(v!==null)score[q.field]+=v*w; });
+  LIFE.forEach((q,i)=>{ const v=val("life_"+i); for(const f in q.f){ if(v!==null)score[f]+=v*q.f[f]; max[f]+=5*q.f[f]; } });
+  const pct={},aptPct={};
+  for(const k in FIELDS){ pct[k]=max[k]>0?Math.round(100*score[k]/max[k]):0; aptPct[k]=aptMax[k]>0?Math.round(100*apt[k]/aptMax[k]):0; }
+  let g=0; GRIT.forEach((q,i)=>{ g+=(val("grit_"+i)||0); });
+  const gritPct=Math.round(100*g/(GRIT.length*5));
+  return {pct,aptPct,gritPct};
+}
+function allAnswered(){ return countAnswered()===TOTAL; }
+
+/* ====== INTERPRETASI ====== */
+const DESC = {
+  MAT:"Fondasi paling fleksibel — membuka CS/AI, fisika, teknik, keuangan kuantitatif. Bergengsi (IMO), menuntut latihan tekun.",
+  INF:"Prospek karier & mobilitas global terkuat (gaji tinggi, kerja remote, era AI). Jalur ITB/luar negeri, skill kepakai seumur hidup. Olimpiade: IOI.",
+  FIS:"Kuat untuk teknik & riset (IPhO). Cocok bila kamu suka memahami cara kerja dunia fisik lewat penalaran.",
+  KIM:"Pintu ke farmasi, material, teknik kimia, kedokteran (IChO). Konsep + hafalan + lab.",
+  BIO:"Pintu ke kedokteran (UGM/Unair) & bioteknologi (IBO). Sangat dihargai di Indonesia; jalur dokter panjang & mobilitas global lebih sulit.",
+  EKO:"Untuk arah bisnis, kebijakan & keuangan (IEO). Nyambung erat dengan matematika."
+};
+function interpret(r){
+  const {pct,aptPct,gritPct}=r;
+  const ranked=Object.keys(pct).sort((a,b)=>pct[b]-pct[a]);
+  const aptRanked=Object.keys(aptPct).sort((a,b)=>aptPct[b]-aptPct[a]);
+  const top=ranked[0],second=ranked[1],third=ranked[2];
+  const gap=pct[top]-pct[second];
+  let h=`<b>Peringkat kecocokan total:</b><br>`;
+  ranked.forEach((k,i)=>{ h+=`<span class="pill">${i+1}. ${FIELDS[k]} — ${pct[k]}%</span>`; });
+  h+=`<br><br><b>🏆 Teratas: ${FIELDS[top]} (${pct[top]}%)</b><br>${DESC[top]}`;
+  if(gap<7) h+=`<br><br><span class="warn">⚖️ ${FIELDS[top]} & ${FIELDS[second]} berimbang (selisih ${gap} poin).</span> Keduanya kandidat kuat — uji-coba nyata yang menentukan.`;
+  else h+=`<br><br>Cadangan: <b>${FIELDS[second]} (${pct[second]}%)</b>, lalu ${FIELDS[third]} (${pct[third]}%).`;
+
+  // bakat vs minat
+  const bestApt=aptRanked[0];
+  h+=`<br><br><b>🎯 Bakat mentah tertinggi:</b> ${FIELDS[bestApt]} (${aptPct[bestApt]}% jawaban benar).`;
+  if(bestApt!==top){
+    h+=` <span class="warn">Menarik:</span> bidang yang paling kamu MINATI (${FIELDS[top]}) berbeda dari yang penalaranmu paling kuat (${FIELDS[bestApt]}). Ini normal — bakat bisa dilatih. Pertimbangkan keduanya, dan lihat mana yang minat + bakatnya bisa kamu naikkan bersamaan.`;
+  } else {
+    h+=` Bagus — minat dan bakat mentahmu sejalan di ${FIELDS[top]}, sinyal yang kuat.`;
+  }
+
+  // grit
+  let gritTxt;
+  if(gritPct>=80) gritTxt=`Sangat tinggi (${gritPct}%). Kamu punya mental petarung yang dibutuhkan jalur olimpiade.`;
+  else if(gritPct>=60) gritTxt=`Cukup baik (${gritPct}%). Modal bagus; latih konsistensi rutin harian.`;
+  else gritTxt=`Sedang/perlu dibangun (${gritPct}%). Bakat & minat saja tidak cukup untuk olimpiade — mulai bangun kebiasaan latihan kecil yang konsisten dulu.`;
+  h+=`<br><br><b>🔥 Skor Grit (ketekunan): ${gritPct}%.</b> ${gritTxt}`;
+
+  // dilema INF vs BIO
+  const hasINF=(top==="INF"||second==="INF"), hasBIO=(top==="BIO"||second==="BIO");
+  if(hasINF&&hasBIO){
+    h+=`<br><br><b>Soal dilema Informatika vs Biologi/Kedokteran:</b> kamu kuat di dua jalur hidup yang sangat berbeda. Pertanyaan penentunya: lebih menikmati <i>membangun & memecahkan masalah dengan logika</i> (Informatika) atau <i>memahami makhluk hidup & merawat manusia</i> (Biologi/Kedokteran)? Untuk tujuan "menjanjikan + peluang luar negeri", Informatika lebih ringan modal & fleksibel; Kedokteran lebih bermakna & stabil tapi jalurnya panjang.`;
+  }
+
+  h+=`<br><br><b>Langkah 4 minggu (manfaatkan waktu sebelum/awal SMA):</b><ol>
+    <li>Ambil 2 bidang teratas. Latihan tiap hari 30–60 menit dengan soal asli.</li>
+    <li>Catat mana yang bikin kamu <i>lupa waktu</i> & penasaran — itu sinyal terkuat.</li>
+    <li>Pantau perkembangan: bakat yang awalnya rendah tapi kamu nikmati sering naik cepat.</li>
+    <li>Kamu punya 3 tahun penuh — pilih yang prosesnya kamu nikmati, lalu konsisten.</li>
+  </ol>`;
+  return h;
+}
+function showResult(r){
+  const ranked=Object.keys(r.pct).sort((a,b)=>r.pct[b]-r.pct[a]);
+  let h="";
+  ranked.forEach(k=>{ h+=`<div class="bar"><div class="lab"><span>${FIELDS[k]}</span><span>${r.pct[k]}%</span></div><div class="track"><div class="fill" data-w="${r.pct[k]}"></div></div></div>`; });
+  document.getElementById("bars").innerHTML=h;
+  const ar=Object.keys(r.aptPct).sort((a,b)=>r.aptPct[b]-r.aptPct[a]);
+  let h2="";
+  ar.forEach(k=>{ h2+=`<div class="bar"><div class="lab"><span>${FIELDS[k]}</span><span>${r.aptPct[k]}%</span></div><div class="track"><div class="fill apt" data-w="${r.aptPct[k]}"></div></div></div>`; });
+  document.getElementById("aptbars").innerHTML=h2;
+  document.getElementById("interp").innerHTML=interpret(r);
+  const res=document.getElementById("result"); res.style.display="block"; res.scrollIntoView({behavior:"smooth"});
+  setTimeout(()=>{ document.querySelectorAll(".fill").forEach(f=>f.style.width=f.dataset.w+"%"); },60);
+}
+document.getElementById("submit").addEventListener("click",()=>{
+  const err=document.getElementById("err");
+  if(!allAnswered()){ err.style.display="block"; err.scrollIntoView({behavior:"smooth"}); return; }
+  err.style.display="none"; showResult(compute());
+});
+updateProgress();
+</script>
+</body>
+</html>
